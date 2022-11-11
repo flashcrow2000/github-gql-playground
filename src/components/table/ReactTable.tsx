@@ -1,5 +1,6 @@
-import Table from "rc-table";
-import { useEffect, useState } from "react";
+import Table from 'rc-table';
+import { useEffect, useState } from 'react';
+import './ReactTable.css';
 
 export const ReactTable = ({rows}: {rows: any[]}) => {
 
@@ -21,9 +22,9 @@ export const ReactTable = ({rows}: {rows: any[]}) => {
 
   const columns = [
     {
-      title: "Author",
-      dataIndex: "author",
-      key: "author",
+      title: 'Author',
+      dataIndex: 'author',
+      key: 'author',
       width: 100,
       render: (text: string, record: any) => {
         return (
@@ -33,43 +34,54 @@ export const ReactTable = ({rows}: {rows: any[]}) => {
       )},
     },
     {
-      title: "Number",
-      dataIndex: "number",
-      key: "number",
+      title: 'Number',
+      dataIndex: 'number',
+      key: 'number',
       width: 100,
     },
     {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
-      width: 300
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+      width: 450
     },
     {
-      title: "Created at",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      width:100,
+      title: 'Created at',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      width:200,
+      render: (text: string, record: any) => {
+        const createdAtDate = new Date(text);
+        console.log(createdAtDate);
+        const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
+
+        return (
+          <div style={{textAlign: 'center'}}>
+          {createdAtDate.toLocaleDateString('en-UK')}
+        </div>
+      )},
     },
     {
-      title: "URL",
-      dataIndex: "url",
-      key: "url",
+      title: 'URL',
+      dataIndex: 'url',
+      key: 'url',
       width:100,
       render: (text: string, record: any) => {
-        console.log({text, record});
         return (
-        <a href="#">
-          Delete
+        <a href={text}>
+          {record.number}
         </a>
       )},
     },
   ];
 
   return (
-    <Table
-      columns={columns}
-      data={tableData}
-      tableLayout="auto"
-    />
+    <div className='tableContainer'>
+      <Table
+        columns={columns}
+        data={tableData}
+        tableLayout='auto'
+      />
+    </div>
   );
 };
