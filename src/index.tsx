@@ -8,7 +8,8 @@ import {  ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-const githubToken = "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";
+//const githubToken = "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";
+const githubToken = "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";
 
 const client = new ApolloClient({
   uri: 'https://api.github.com/graphql',

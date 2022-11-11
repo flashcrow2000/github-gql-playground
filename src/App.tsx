@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import { isNonEmptyArray } from '@apollo/client/utilities';
 import { useEffect, useState } from 'react';
 import { ReactTable } from './components/table/ReactTable';
 import { Toolbar } from './components/toolbar/Toolbar';
@@ -7,39 +6,49 @@ import { Toolbar } from './components/toolbar/Toolbar';
 function App() {
   const [pageSize, setPageSize] = useState(20);
   const GetRepoQuery = gql`
-  query GetRepo { 
+  query GetRepo($pageSize: Int!) { 
     repository(name: "react", owner: "facebook"){
-      issues(last:${pageSize}, states: OPEN) {
+      issues(last:$pageSize, states: OPEN) {
         edges {
           node {
+            author {
+              login
+            }
             number
             title
-            createdAt
             url
-            author { login }
+            createdAt
           }
-          cursor
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
         }
       }
     }
   }  
   `;
   const [rows, setRows] = useState<any[]>([]);
-  const { loading, error, data } = useQuery(GetRepoQuery);
+  const { data, refetch } = useQuery(GetRepoQuery, {
+    variables: { pageSize }
+  });
 
   useEffect(() => {
     if (data) {
       setRows(data.repository?.issues?.edges ?? []);
     }
-  }, [data])
+  }, [data]);
 
-  
+  useEffect(() => {
+    console.log('new pagesize:', pageSize);
+    refetch({pageSize});
+  }, [pageSize]);
   
   return (
     <div>
       <p>
         <ReactTable rows={rows} />
-        <Toolbar />
+        <Toolbar pageSize={pageSize} setPageSize={setPageSize}/>
       </p>
     </div>
   );

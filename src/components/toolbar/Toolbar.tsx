@@ -1,8 +1,8 @@
 import './Toolbar.css';
 
 type ToolbarProps = {
-  pageSize?: number;
-  setPageSize?: (newSize: number) => void;
+  pageSize: number;
+  setPageSize: (newSize: number) => void;
   handleGetNextPage?: () => void;
 }
 
@@ -24,7 +24,8 @@ const options = [
 export const Toolbar = ({pageSize, setPageSize, handleGetNextPage}: ToolbarProps) => {
   return (
     <div className='container'>
-      <select onChange={(ev) => console.log(ev.target.value)}>
+      <label>Items per page:</label>
+      <select onChange={(ev) => setPageSize(+ev.target.value)}>
         {options.map((option) => (
           <option value={option.value} selected={+option.value === pageSize}>{option.value}</option>
         ))}
